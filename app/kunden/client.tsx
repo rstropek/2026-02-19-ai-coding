@@ -5,6 +5,7 @@ import { Plus, Edit, Trash2, RefreshCw, X } from 'lucide-react';
 import { createCustomerAction, updateCustomerAction, deleteCustomerAction } from './actions';
 import type { CustomerWithCountry } from '@/lib/customers';
 import type { Country } from '@/lib/countries';
+import DataTable, { type DataTableColumn } from '@/components/DataTable';
 
 interface CustomerManagementClientProps {
   customers: CustomerWithCountry[];
@@ -75,6 +76,21 @@ export default function CustomerManagementClient({
     setSelectedCustomer(customer);
   };
 
+  const columns: DataTableColumn<CustomerWithCountry>[] = [
+    { key: 'name', header: 'Name', render: (customer) => customer.name },
+    { key: 'shortName', header: 'Kurzbezeichnung', render: (customer) => customer.short_name || '' },
+    { key: 'street', header: 'Straße', render: (customer) => customer.street || '' },
+    {
+      key: 'postalAndCity',
+      header: 'PLZ + Ort',
+      render: (customer) =>
+        customer.postal_code || customer.city
+          ? `${customer.postal_code || ''} ${customer.city || ''}`.trim()
+          : '',
+    },
+    { key: 'countryName', header: 'Land', render: (customer) => customer.country_name || '' },
+  ];
+
   return (
     <div style={{ padding: 'var(--space-4)' }}>
       <div style={{ marginBottom: 'var(--space-3)', display: 'flex', gap: 'var(--space-2)' }}>
@@ -96,40 +112,14 @@ export default function CustomerManagementClient({
         </button>
       </div>
 
-      <table className="data-grid">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Kurzbezeichnung</th>
-            <th>Straße</th>
-            <th>PLZ + Ort</th>
-            <th>Land</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customers.map((customer) => (
-            <tr
-              key={customer.id}
-              onClick={() => handleRowClick(customer)}
-              className={selectedCustomer?.id === customer.id ? 'selected' : ''}
-              role="button"
-              tabIndex={0}
-              aria-label={customer.name}
-              onKeyDown={(e) => e.key === 'Enter' && handleRowClick(customer)}
-            >
-              <td>{customer.name}</td>
-              <td>{customer.short_name || ''}</td>
-              <td>{customer.street || ''}</td>
-              <td>
-                {customer.postal_code || customer.city
-                  ? `${customer.postal_code || ''} ${customer.city || ''}`.trim()
-                  : ''}
-              </td>
-              <td>{customer.country_name || ''}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+        items={customers}
+        columns={columns}
+        getRowKey={(customer) => customer.id}
+        onRowClick={handleRowClick}
+        isRowSelected={(customer) => selectedCustomer?.id === customer.id}
+        getRowAriaLabel={(customer) => customer.name}
+      />
 
       {isPanelOpen && (
         <div

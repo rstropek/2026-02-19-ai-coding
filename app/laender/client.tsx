@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Plus, Edit, Trash2, RefreshCw, X } from 'lucide-react';
 import { createCountryAction, updateCountryAction, deleteCountryAction } from './actions';
 import type { Country } from '@/lib/countries';
+import DataTable, { type DataTableColumn } from '@/components/DataTable';
 
 interface CountryManagementClientProps {
   countries: Country[];
@@ -70,6 +71,11 @@ export default function CountryManagementClient({ countries: initialCountries }:
     setSelectedCountry(country);
   };
 
+  const columns: DataTableColumn<Country>[] = [
+    { key: 'code', header: 'Code', render: (country) => country.code },
+    { key: 'name', header: 'Name', render: (country) => country.name },
+  ];
+
   return (
     <div style={{ padding: 'var(--space-4)' }}>
       <div style={{ marginBottom: 'var(--space-3)', display: 'flex', gap: 'var(--space-2)' }}>
@@ -91,30 +97,14 @@ export default function CountryManagementClient({ countries: initialCountries }:
         </button>
       </div>
 
-      <table className="data-grid">
-        <thead>
-          <tr>
-            <th>Code</th>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {countries.map((country) => (
-            <tr
-              key={country.id}
-              onClick={() => handleRowClick(country)}
-              className={selectedCountry?.id === country.id ? 'selected' : ''}
-              role="button"
-              tabIndex={0}
-              aria-label={`${country.code} ${country.name}`}
-              onKeyDown={(e) => e.key === 'Enter' && handleRowClick(country)}
-            >
-              <td>{country.code}</td>
-              <td>{country.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+        items={countries}
+        columns={columns}
+        getRowKey={(country) => country.id}
+        onRowClick={handleRowClick}
+        isRowSelected={(country) => selectedCountry?.id === country.id}
+        getRowAriaLabel={(country) => `${country.code} ${country.name}`}
+      />
 
       {isPanelOpen && (
         <div

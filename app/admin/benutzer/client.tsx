@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
 import { createUserAction, updateUserAction, deleteUserAction } from './actions';
 import type { User } from '@/lib/users';
+import DataTable, { type DataTableColumn } from '@/components/DataTable';
 
 interface UserManagementClientProps {
   users: User[];
@@ -64,6 +65,37 @@ export default function UserManagementClient({ users }: UserManagementClientProp
     return role === 'employee' ? 'Mitarbeiter' : 'Buchhaltung';
   };
 
+  const columns: DataTableColumn<User>[] = [
+    { key: 'username', header: 'Benutzername', render: (user) => user.username },
+    { key: 'name', header: 'Name', render: (user) => user.name },
+    { key: 'role', header: 'Rolle', render: (user) => getRoleLabel(user.role) },
+    { key: 'isAdmin', header: 'Admin', render: (user) => (user.is_admin ? 'Ja' : 'Nein') },
+    {
+      key: 'actions',
+      header: 'Aktionen',
+      headerStyle: { width: '120px' },
+      render: (user) => (
+        <>
+          <button
+            onClick={() => handleEdit(user)}
+            className="btn-toolbar"
+            title="Bearbeiten"
+          >
+            <Edit size={14} />
+          </button>
+          <button
+            onClick={() => handleDelete(user.id)}
+            className="btn-toolbar"
+            title="Löschen"
+            style={{ marginLeft: 'var(--space-1)' }}
+          >
+            <Trash2 size={14} />
+          </button>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
       <div style={{ marginBottom: 'var(--space-4)' }}>
@@ -73,44 +105,11 @@ export default function UserManagementClient({ users }: UserManagementClientProp
         </button>
       </div>
 
-      <table className="data-grid">
-        <thead>
-          <tr>
-            <th>Benutzername</th>
-            <th>Name</th>
-            <th>Rolle</th>
-            <th>Admin</th>
-            <th style={{ width: '120px' }}>Aktionen</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.username}</td>
-              <td>{user.name}</td>
-              <td>{getRoleLabel(user.role)}</td>
-              <td>{user.is_admin ? 'Ja' : 'Nein'}</td>
-              <td>
-                <button
-                  onClick={() => handleEdit(user)}
-                  className="btn-toolbar"
-                  title="Bearbeiten"
-                >
-                  <Edit size={14} />
-                </button>
-                <button
-                  onClick={() => handleDelete(user.id)}
-                  className="btn-toolbar"
-                  title="Löschen"
-                  style={{ marginLeft: 'var(--space-1)' }}
-                >
-                  <Trash2 size={14} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+        items={users}
+        columns={columns}
+        getRowKey={(user) => user.id}
+      />
 
       {mode !== 'list' && (
         <div className="panel-overlay" onClick={handleClose}>
