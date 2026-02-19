@@ -3,8 +3,8 @@ import { SessionOptions } from 'iron-session';
 export interface SessionData {
   userId?: number;
   userName?: string;
-  userEmail?: string;
-  rolle?: 'mitarbeiter' | 'buchhaltung' | 'admin';
+  role?: 'employee' | 'accounting';
+  isAdmin?: boolean;
 }
 
 export const sessionOptions: SessionOptions = {

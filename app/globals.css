@@ -417,3 +417,42 @@ body {
     padding: var(--space-4);
   }
 }
+
+/* ── Login Page ──────────────────────────────────────────────── */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--color-bg-app);
+}
+
+.login-card {
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-primary);
+}
+
+.login-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+
+.login-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-5);
+}

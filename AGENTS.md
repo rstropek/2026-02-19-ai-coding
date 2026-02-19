@@ -6,6 +6,8 @@ In diesem Projekt wird eine einfache Reisekostenabrechnung implementiert. Mitarb
 
 Die Sprache für Spezifikationen und Dokumentation ist Deutsch. Im Quellcode wird jedoch immer Englisch verwendet. Englisch verwenden wir auch für technische Dokumente.
 
+Englisch ist auf jeden Fall für alle Variablen, Funktionsnamen, Klassennamen, Tabellen, Tabellenspalten, etc. zu verwenden.
+
 ## Technologien
 
 - Programmiersprache: TypeScript
