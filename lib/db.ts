@@ -45,7 +45,7 @@ function initDb(database: Database.Database): void {
     );
   `);
 
-  database.exec(`
+   database.exec(`
     CREATE TABLE IF NOT EXISTS customers (
       id          INTEGER PRIMARY KEY AUTOINCREMENT,
       name        TEXT    UNIQUE NOT NULL,
@@ -54,6 +54,21 @@ function initDb(database: Database.Database): void {
       postal_code TEXT,
       city        TEXT,
       country_id  INTEGER REFERENCES countries(id) ON DELETE SET NULL
+    );
+  `);
+
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS trips (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      employee_id   INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      customer_id   INTEGER REFERENCES customers(id) ON DELETE SET NULL,
+      start_date    TEXT    NOT NULL,
+      end_date      TEXT    NOT NULL,
+      purpose       TEXT    NOT NULL,
+      destination   TEXT    NOT NULL,
+      status        TEXT    NOT NULL DEFAULT 'draft' CHECK(status IN ('draft','submitted','approved','rejected')),
+      created_at    TEXT    NOT NULL DEFAULT (datetime('now')),
+      updated_at    TEXT    NOT NULL DEFAULT (datetime('now'))
     );
   `);
 

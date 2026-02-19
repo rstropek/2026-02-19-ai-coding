@@ -1,12 +1,22 @@
-export default function ReisenPage() {
+import { getAllTrips } from '@/lib/trips';
+import { getAllCustomers } from '@/lib/customers';
+import TripManagementClient from './client';
+import { getIronSession } from 'iron-session';
+import { cookies } from 'next/headers';
+import { sessionOptions, SessionData } from '@/lib/session';
+
+export default async function ReisenPage() {
+  const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+  const trips = getAllTrips();
+  const customers = getAllCustomers();
+  const isAccounting = session.role === 'accounting';
+
   return (
-    <>
+    <div>
       <div className="page-header">
-        <span className="page-title">Reisen</span>
+        <h1 className="page-title">Reisen</h1>
       </div>
-      <p style={{ padding: 'var(--space-4)', color: 'var(--color-text-secondary)' }}>
-        Reisenliste wird hier angezeigt.
-      </p>
-    </>
+      <TripManagementClient trips={trips} customers={customers} isAccounting={isAccounting} />
+    </div>
   );
 }
