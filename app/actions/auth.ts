@@ -6,7 +6,7 @@ import { getIronSession } from 'iron-session';
 import { sessionOptions, SessionData } from '@/lib/session';
 import { getUserByUsername } from '@/lib/users';
 
-export async function login(formData: FormData) {
+export async function login(prevState: { error: string } | null, formData: FormData) {
   const username = formData.get('username') as string;
 
   if (!username || username.trim() === '') {

@@ -7,8 +7,8 @@ import { createUser, updateUser, deleteUser, type UserRole } from '@/lib/users';
 const userSchema = z.object({
   username: z.string().min(1, 'Benutzername ist erforderlich'),
   name: z.string().min(1, 'Name ist erforderlich'),
-  role: z.enum(['employee', 'accounting'] as const, {
-    errorMap: () => ({ message: 'Ungültige Rolle' }),
+  role: z.enum(['employee', 'accounting'], {
+    message: 'Ungültige Rolle',
   }),
   is_admin: z.boolean(),
 });
@@ -24,7 +24,7 @@ export async function createUserAction(formData: FormData) {
   const result = userSchema.safeParse(data);
 
   if (!result.success) {
-    return { error: result.error.errors[0].message };
+    return { error: result.error.issues[0].message };
   }
 
   try {
@@ -51,7 +51,7 @@ export async function updateUserAction(formData: FormData) {
   const result = userSchema.safeParse(data);
 
   if (!result.success) {
-    return { error: result.error.errors[0].message };
+    return { error: result.error.issues[0].message };
   }
 
   try {

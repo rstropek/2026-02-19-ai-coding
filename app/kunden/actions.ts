@@ -27,7 +27,7 @@ export async function createCustomerAction(formData: FormData) {
   const result = customerSchema.safeParse(data);
 
   if (!result.success) {
-    return { error: result.error.errors[0].message };
+    return { error: result.error.issues[0].message };
   }
 
   try {
@@ -57,7 +57,7 @@ export async function updateCustomerAction(formData: FormData) {
   const result = customerSchema.safeParse(data);
 
   if (!result.success) {
-    return { error: result.error.errors[0].message };
+    return { error: result.error.issues[0].message };
   }
 
   try {

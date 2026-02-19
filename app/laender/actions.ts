@@ -18,7 +18,7 @@ export async function createCountryAction(formData: FormData) {
   const result = countrySchema.safeParse(data);
 
   if (!result.success) {
-    return { error: result.error.errors[0].message };
+    return { error: result.error.issues[0].message };
   }
 
   try {
@@ -43,7 +43,7 @@ export async function updateCountryAction(formData: FormData) {
   const result = countrySchema.safeParse(data);
 
   if (!result.success) {
-    return { error: result.error.errors[0].message };
+    return { error: result.error.issues[0].message };
   }
 
   try {
